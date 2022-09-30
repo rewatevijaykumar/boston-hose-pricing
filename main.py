@@ -3,6 +3,7 @@ from flask import Flask, request, app, jsonify, url_for, render_template
 import pandas as pd
 import numpy as np
 import pickle
+import os
 
 app = Flask(__name__)
 
@@ -36,4 +37,4 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=os.getenv("PORT", default=5000))
