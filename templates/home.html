@@ -2,23 +2,147 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
 <html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Flask Web App - Boston Housing Price</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link href="{{url_for('static',filename='css/output.css')}}" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     </head>
-    <body>
+    <body class="font-body bg-white">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <h1>
-            Hello
-        </h1>
-        <script src="" async defer></script>
+        <div class="flex justify-center items-center bg-yellow-300 p-4 md:py-10 w-full">
+            <h1 class="text-2xl md:text-5xl font-bold text-black uppercase text-center">Machine Learning Deployment Using Flask</h1>
+        </div>
+        <div class="container p-1 lg:p-5 mx-auto">
+            <div class="flex justify-center items-center p-5 w-full">
+                <h1 class="text-xl md:text-4xl font-bold text-yellow-800 underline underline-offset-4">
+                    Boston Housing Price Prediction
+                </h1>
+            </div>
+            <div class="flex flex-col justify-center items-center mx-auto"> 
+                <form class="my-5 space-y-2 flex flex-col lg:max-w-xl justify-center p-3 md:p-5 items-center rounded-lg shadow-lg bg-yellow-300 md:m-5" 
+                action="{{ url_for('predict')}}" method='POST'>
+                    <div class="relative flex flex-col space-y-2 w-full md:flex-row justify-end items-center pt-1">
+                        <label for="CRIM" class="form-label text-center text-lg md:mr-4">CRIM: </label>
+                        <input type="text" name="CRIM" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="CRIM" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="ZN" class="form-label text-center text-lg md:mr-4">ZN: </label>
+                        <input type="text" name="ZN" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="ZN" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="INDUS" class="form-label text-center text-lg md:mr-4">INDUS: </label>
+                        <input type="text" name="INDUS" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="INDUS" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="CHAS" class="form-label text-center text-lg md:mr-4">CHAS: </label>
+                        <input type="text" name="CHAS" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="CHAS" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="NOX" class="form-label text-center text-lg md:mr-4">NOX: </label>
+                        <input type="text" name="NOX" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="NOX" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="RM" class="form-label text-center text-lg md:mr-4">RM: </label>
+                        <input type="text" name="RM" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="RM" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="Age" class="form-label text-center text-lg md:mr-4">Age: </label>
+                        <input type="text" name="Age" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="Age" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="DIS" class="form-label text-center text-lg md:mr-4">DIS: </label>
+                        <input type="text" name="DIS" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="DIS" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="RAD" class="form-label text-center text-lg md:mr-4">RAD: </label>
+                        <input type="text" name="RAD" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="RAD" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="ZN" class="form-label text-center text-lg md:mr-4">ZN: </label>
+                        <input type="text" name="ZN" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="ZN" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="TAX" class="form-label text-center text-lg md:mr-4">TAX: </label>
+                        <input type="text" name="TAX" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="TAX" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="PTRATIO" class="form-label text-center text-lg md:mr-4">PTRATIO: </label>
+                        <input type="text" name="PTRATIO" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="PTRATIO" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="B" class="form-label text-center text-lg md:mr-4">B: </label>
+                        <input type="text" name="B" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="B" required>
+                    </div>
+                    <div class="relative flex flex-col space-y-2 md:flex-row w-full justify-end items-center pt-1">
+                        <label for="LSTAT" class="form-label text-center text-lg md:mr-4">LSTAT: </label>
+                        <input type="text" name="LSTAT" 
+                        class="form-control placeholder:text-center md:placeholder:text-left bg-white rounded-lg p-2" 
+                        placeholder="LSTAT" required>
+                    </div>
+                    <button type="submit" class="bg-yellow-700 hover:bg-yellow-600 text-white font-bold text-lg px-3 py-2 rounded-lg">Predict</button>
+                </form>
+                {% if error %}
+                    <div class="flex mx-auto bg-red-100 rounded-lg p-4 lg:max-w-xl mb-4 text-sm md:text-lg text-red-700" role="alert">
+                        <svg class="w-5 h-5 inline mr-3 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                            <span class="font-medium mr-1">Alert!</span> {{error}}
+                    </div>
+                {% endif %}
+            </div>
+        
+            {% if prediction %}
+            <div class="flex flex-col justify-center items-center my-5">
+                <h3 class="border-yellow-400 border-4 border-dashed p-4 font-bold uppercase shadow-lg rounded-md">Price: {{prediction}}</h3>
+            </div>
+            {% endif %}
+
+             <!--footer-->
+             <div class="w-full mx-auto container">
+                <div class="flex justify-center items-center m-1 md:m-10 p-2 md:p-5 border-y-4 border-yellow-400" >
+                    <h4 class="inline-flex justify-center items-center text-lg font-semibold">Made with <svg class="h-5 w-5 text-red-600 mx-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                        <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                    </svg>
+                    by <a href="https://www.github.com/rewatevijaykumar" class="mx-1">Vijaykumar Rewate</a></h4>
+                </div>
+            </div>
+        </div>
+
+
+      
     </body>
 </html>
